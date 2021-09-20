@@ -19,6 +19,14 @@ describe('demo routes', () => {
     });
   });
 
+  it('returns a single beer by id via GET', async () => {
+    const beer = await Beer.insert({ name: 'beer1', style: 'pale', hops: 'simcoe'  });
+
+    const res = await request(app).get(`/api/v1/beers/${beer.id}`);
+
+    expect(res.body).toEqual(beer);
+  });
+
   it('returns all beers via GET', async () => {
     const beer1 = await Beer.insert({ name: 'beer1', style: 'pale', hops: 'simcoe' });
     const beer2 = await Beer.insert({ name: 'beer2', style: 'ipa', hops: 'mosaic'  });
@@ -31,7 +39,7 @@ describe('demo routes', () => {
       });
   });
 
-  it('updates a beer by id via GET', async () => {
+  it('updates a beer by id via PUT', async () => {
     const beer = await Beer.insert({ name: 'beer1', style: 'pale', hops: 'simcoe' });
 
     const res = await request(app)
@@ -41,5 +49,14 @@ describe('demo routes', () => {
     expect(res.body).toEqual({ ...beer, hops: 'citra' });
   });
 
+  it('deletes an existing beer by id', async () => {
+    const beer = await Beer.insert({ name: 'beer1', style: 'pale', hops: 'simcoe' });
+
+    const res = await request(app).delete(`/api/v1/beers/${beer.id}`);
+
+    expect(res.body).toEqual({
+      message: `${beer.name} has been deleted!`
+    });
+  });
 
 });
