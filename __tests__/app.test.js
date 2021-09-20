@@ -31,5 +31,15 @@ describe('demo routes', () => {
       });
   });
 
+  it('updates a beer by id via GET', async () => {
+    const beer = await Beer.insert({ name: 'beer1', style: 'pale', hops: 'simcoe' });
+
+    const res = await request(app)
+      .put(`/api/v1/beers/${beer.id}`)
+      .send({ hops: 'citra' });
+
+    expect(res.body).toEqual({ ...beer, hops: 'citra' });
+  });
+
 
 });
